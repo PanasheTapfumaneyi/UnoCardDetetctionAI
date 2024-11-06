@@ -30,26 +30,24 @@ class_names = ['blue_0', 'blue_1', 'blue_2', 'blue_3', 'blue_4', 'blue_5', 'blue
                'wild', 'wild_draw_four', 'yellow_0', 'yellow_1', 'yellow_2', 'yellow_3', 'yellow_4', 'yellow_5', 'yellow_6', 
                'yellow_7', 'yellow_8', 'yellow_9', 'yellow_draw_two', 'yellow_reverse', 'yellow_skip']
 
-# Start video capture
+# Load an image from a file
+image_path = "10061.jpg"  # Specify the path to your image file
+frame = cv2.imread(image_path)
 
-cap = cv2.VideoCapture("http://192.168.100.166:8080/video")
-
-while True:
-    ret, frame = cap.read() #Capure each frame
-    if not ret:
-        break
-
+# Check if the image was loaded successfully
+if frame is None:
+    print("Error: Could not load image.")
+else:
+    # Run prediction on the loaded image
     predicted_class_index, predictions = predict_card(frame)
     predicted_class_name = class_names[predicted_class_index]
 
-    # Display the prediction in the frams
+    # Display the prediction on the image
     cv2.putText(frame, f'Predicted Class: {predicted_class_name}', (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
     cv2.imshow('Card Detection', frame)
 
-    #Press q to quit the program
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    # Wait until a key is pressed to close the window
+    cv2.waitKey(0)
 
-#Close the Windows
-cap.release()
+# Close the windows
 cv2.destroyAllWindows()
